@@ -1,0 +1,43 @@
+body, button {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 0;
+  padding: 0;
+}
+
+.heading {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.calculator {
+  border: 4px double blue;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.display {
+  border: 4px double blue;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: right;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.row {
+  display: flex;
+  margin: 4px;
+  gap: 4px;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 16px 32px;
+  flex: 1;
+  font-size: 20px;
+  font-weight: 600;
+}
