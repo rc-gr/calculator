@@ -1,6 +1,7 @@
-let first = 0;
-let second = 0;
+let first = '';
+let second = '';
 let operation = '';
+let displayText = '0';
 
 function add(a, b) {
   return +a + +b;
@@ -34,8 +35,15 @@ function operate(op, a, b) {
   }
 }
 
+function updateDisplay() {
+  document.querySelector('#display').textContent =
+    [first, operation, second].join(' ');
+}
+
 function appendDigit(event) {
-  console.log(event.target.textContent);
+  first += event.target.textContent;
+  first = +first;
+  updateDisplay()
 }
 
 function addNumButtonListeners() {
