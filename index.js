@@ -33,3 +33,21 @@ function operate(op, a, b) {
       break;
   }
 }
+
+function appendDigit(event) {
+  console.log(event.target.textContent);
+}
+
+function addNumButtonListeners() {
+  document
+    .querySelectorAll('.num')
+    .forEach((button) => {
+      button.addEventListener('click', appendDigit)
+    })
+}
+
+function main() {
+  addNumButtonListeners();
+}
+
+window.addEventListener('load', main);
