@@ -45,16 +45,22 @@ function updateDisplay() {
 }
 
 function registerDigit(event) {
+  if (operation !== '' && storedNumber === '') {
+    storedNumber = shownNumber;
+    shownNumber = '';
+  }
   shownNumber += event.target.textContent;
   shownNumber = +shownNumber;
   updateDisplay();
 }
 
 function registerOperation(event) {
+  if (storedNumber !== '') {
+    shownNumber = operate(operation, storedNumber, shownNumber);
+    updateDisplay();
+    storedNumber = '';
+  }
   operation = event.target.id;
-  storedNumber = shownNumber;
-  shownNumber = '0';
-  console.log(operation);
 }
 
 function addNumButtonListeners() {
