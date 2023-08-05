@@ -10,13 +10,23 @@ const LastPressed = Object.freeze({
   EQUALS: 3,
 });
 
-let lastPressed = LastPressed.NOTHING;
-let shownNumber = '0';
-let firstNumber = null;
-let secondNumber = null;
-let operation = null;
-let displayText = '0';
-let operationPressed = false;
+let lastPressed;
+let shownNumber;
+let firstNumber;
+let secondNumber;
+let operation;
+let displayText;
+let operationPressed;
+
+function initialize() {
+  lastPressed = LastPressed.NOTHING;
+  shownNumber = '0';
+  firstNumber = null;
+  secondNumber = null;
+  operation = null;
+  displayText = '0';
+  operationPressed = false;
+}
 
 function add(a, b) {
   return +a + +b;
@@ -106,6 +116,11 @@ function registerEquals() {
   lastPressed = LastPressed.EQUALS;
 }
 
+function registerClear() {
+  initialize();
+  updateDisplay();
+}
+
 function addNumButtonListeners() {
   document
     .querySelectorAll('.num')
@@ -128,10 +143,18 @@ function addEqualButtonListener() {
     .addEventListener('click', registerEquals);
 }
 
+function addClearButtonListener() {
+  document
+    .querySelector('#clear')
+    .addEventListener('click', registerClear);
+}
+
 function main() {
+  initialize();
   addNumButtonListeners();
   addOpButtonListeners();
   addEqualButtonListener();
+  addClearButtonListener();
 }
 
 window.addEventListener('load', main);
