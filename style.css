@@ -17,6 +17,7 @@ body, button {
   border: 4px double blue;
   border-radius: 8px;
   padding: 16px;
+  width: 320px;
 }
 
 .display {
@@ -36,7 +37,7 @@ body, button {
 
 .btn {
   border-radius: 8px;
-  padding: 16px 32px;
+  padding: 16px 8px;
   flex: 1;
   font-size: 20px;
   font-weight: 600;
