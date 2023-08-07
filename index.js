@@ -14,12 +14,21 @@ const displayedNumber = {
   raw: null,
   formatted: null,
   _displayId: null,
+  _maxLength: 0,
+  setRaw(value) {
+    this.raw = value;
+    return this;
+  },
   setDisplay(elementId) {
     this._displayId = '#' +  elementId;
     return this;
   },
+  setMaxLength(value) {
+    this._maxLength = value;
+    return this;
+  },
   format() {
-    this.formatted = +this.raw;
+    this.formatted = +this.raw.toString().slice(0, this._maxLength);
     return this;
   },
   display() {
@@ -82,8 +91,7 @@ function operate(op, a, b) {
 }
 
 function updateDisplay() {
-  displayedNumber.raw = inputNumber;
-  displayedNumber.format().display();
+  displayedNumber.setRaw(inputNumber).format().display();
 }
 
 function tallyAndUpdateDisplay() {
@@ -168,7 +176,9 @@ function addClearButtonListener() {
 }
 
 function main() {
-  displayedNumber.setDisplay('display');
+  displayedNumber
+    .setDisplay('display')
+    .setMaxLength(14);
   initialize();
   addNumButtonListeners();
   addOpButtonListeners();
