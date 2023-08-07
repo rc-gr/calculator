@@ -10,21 +10,38 @@ const LastPressed = Object.freeze({
   EQUALS: 3,
 });
 
+const displayedNumber = {
+  raw: null,
+  formatted: null,
+  _displayId: null,
+  setDisplay(elementId) {
+    this._displayId = '#' +  elementId;
+    return this;
+  },
+  format() {
+    this.formatted = +this.raw;
+    return this;
+  },
+  display() {
+    document.querySelector(this._displayId).textContent = this.formatted;
+    return this;
+  },
+};
+
 let lastPressed;
-let shownNumber;
+let inputNumber;
 let firstNumber;
 let secondNumber;
 let operation;
-let displayText;
 let operationPressed;
 
 function initialize() {
   lastPressed = LastPressed.NOTHING;
-  shownNumber = '0';
+  inputNumber = '0';
+  displayedNumber.raw = inputNumber;
   firstNumber = null;
   secondNumber = null;
   operation = null;
-  displayText = '0';
   operationPressed = false;
 }
 
@@ -65,30 +82,31 @@ function operate(op, a, b) {
 }
 
 function updateDisplay() {
-  document.querySelector('#display').textContent = shownNumber;
+  displayedNumber.raw = inputNumber;
+  displayedNumber.format().display();
 }
 
 function tallyAndUpdateDisplay() {
-  shownNumber = operate(operation, firstNumber, secondNumber);
+  inputNumber = operate(operation, firstNumber, secondNumber);
   updateDisplay();
 }
 
 function registerDigit(event) {
   if (lastPressed !== LastPressed.DIGIT) {
-    shownNumber = '0';
+    inputNumber = '0';
   }
-  shownNumber += event.target.textContent;
-  shownNumber = +shownNumber;
+  inputNumber += event.target.textContent;
   updateDisplay();
+  inputNumber = displayedNumber.formatted;
   lastPressed = LastPressed.DIGIT;
 }
 
 function registerBinaryOperation(event) {
   if (lastPressed === LastPressed.DIGIT && firstNumber !== null && operation !== null) {
-    secondNumber = shownNumber;
+    secondNumber = inputNumber;
     tallyAndUpdateDisplay();
   }
-  firstNumber = shownNumber;
+  firstNumber = inputNumber;
   operation = event.target.id;
   lastPressed = LastPressed.BINARY_OPERATION;
   operationPressed = true;
@@ -98,18 +116,18 @@ function registerEquals() {
   if (firstNumber !== null && operation !== null) {
     if (lastPressed === LastPressed.DIGIT) {
       if (operationPressed) {
-        secondNumber = shownNumber;
+        secondNumber = inputNumber;
         operationPressed = false;
       }
       else {
-        firstNumber = shownNumber;
+        firstNumber = inputNumber;
       }
     }
     else if (lastPressed === LastPressed.BINARY_OPERATION) {
-      secondNumber = shownNumber;
+      secondNumber = inputNumber;
     }
     else {
-      firstNumber = shownNumber;
+      firstNumber = inputNumber;
     }
     tallyAndUpdateDisplay();
   }
@@ -150,6 +168,7 @@ function addClearButtonListener() {
 }
 
 function main() {
+  displayedNumber.setDisplay('display');
   initialize();
   addNumButtonListeners();
   addOpButtonListeners();
