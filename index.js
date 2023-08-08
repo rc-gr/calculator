@@ -2,6 +2,7 @@ const OP_ADD = 'add';
 const OP_SUB = 'subtract';
 const OP_MUL = 'multiply';
 const OP_DIV = 'divide';
+const DIV_0_MESSAGE = 'No Div0 4 u!';
 
 const LastPressed = Object.freeze({
   NOTHING: 0,
@@ -13,11 +14,19 @@ const LastPressed = Object.freeze({
 const displayedNumber = {
   raw: null,
   formatted: null,
+  _lastOperation: null,
+  _lastFirstNumber: null,
+  _lastSecondNumber: null,
   _displayId: null,
   _maxLength: 0,
   setRaw(value) {
     this.raw = value;
     return this;
+  },
+  setLastOperate(operation, firstNumber, secondNumber) {
+    this._lastOperation = operation;
+    this._lastFirstNumber = firstNumber;
+    this._lastSecondNumber = secondNumber;
   },
   setDisplay(elementId) {
     this._displayId = '#' +  elementId;
@@ -29,6 +38,16 @@ const displayedNumber = {
   },
   format() {
     this.formatted = +this.raw.toString().slice(0, this._maxLength);
+    if (this.formatted === NaN ||
+        this.formatted === Infinity ||
+        this.formatted === -Infinity) {
+      setNormalFunctionsDisabled(true);
+
+      if (this._lastOperation === OP_DIV && this._lastSecondNumber === 0) {
+        this.formatted = DIV_0_MESSAGE;
+        this.display();
+      }
+    }
     return this;
   },
   display() {
@@ -96,6 +115,7 @@ function updateDisplay() {
 
 function tallyAndUpdateDisplay() {
   inputNumber = operate(operation, firstNumber, secondNumber);
+  displayedNumber.setLastOperate(operation, firstNumber, secondNumber);
   updateDisplay();
 }
 
@@ -142,8 +162,19 @@ function registerEquals() {
   lastPressed = LastPressed.EQUALS;
 }
 
+function setNormalFunctionsDisabled(flag) {
+  document
+    .querySelectorAll('.btn')
+    .forEach((button) => {
+      if (!button.classList.contains('clear')) {
+        button.disabled = flag;
+      }
+    });
+}
+
 function registerClear() {
   initialize();
+  setNormalFunctionsDisabled(false);
   updateDisplay();
 }
 
